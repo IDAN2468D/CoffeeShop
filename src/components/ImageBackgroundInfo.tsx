@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     },
     ItemTitleText: {
         fontFamily: FONTFAMILY.poppins_medium,
-        fontSize: FONTSIZE.size_24,
+        fontSize: FONTSIZE.size_20,
         color: COLORS.primaryWhiteHex,
     },
     ItemSubtitleText: {

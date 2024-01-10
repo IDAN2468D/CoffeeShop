@@ -129,7 +129,7 @@ export const useStore = create(
                         if (state.CartList[i].id == id) {
                             for (let j = 0; j < state.CartList[i].prices.length; j++) {
                                 if (state.CartList[i].prices[j].size == size) {
-                                    state.Cart[i].prices[j].quantity++;
+                                    state.CartList[i].prices[j].quantity++;
                                     break;
                                 }
                             }
@@ -143,15 +143,15 @@ export const useStore = create(
                         if (state.CartList[i].id == id) {
                             for (let j = 0; j < state.CartList[i].prices.length; j++) {
                                 if (state.CartList[i].prices[j].size == size) {
-                                    if (state.CartList[i].price.length > 1) {
+                                    if (state.CartList[i].prices.length > 1) {
                                         if (state.CartList[i].prices[j].quantity > 1) {
-                                            state.CartList[i].prices[j].quantity++;
+                                            state.CartList[i].prices[j].quantity--;
                                         } else {
                                             state.CartList[i].prices.splice(j, 1);
                                         }
                                     } else {
                                         if (state.CartList[i].prices[j].quantity > 1) {
-                                            state.CartList[i].prices[j].quantity++;
+                                            state.CartList[i].prices[j].quantity--;
                                         } else {
                                             state.CartList.splice(j, 1);
                                         }

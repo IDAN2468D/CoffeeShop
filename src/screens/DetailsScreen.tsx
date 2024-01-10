@@ -48,7 +48,6 @@ const DetailsScreen = ({ navigation, route }: any) => {
                     roasted={ItemOfIndex.roasted}
                     BackHandler={BackHandler}
                     ToggleFavourite={ToggleFavourite}
-
                 />
                 <View style={styles.FooterInfoArea}>
                     <Text style={styles.InfoTitle}>Description</Text>
