@@ -11,7 +11,7 @@ interface CoffeeCardProps {
     index: number,
     type: string,
     roasted: string,
-    imagelink_square: ImageProps,
+    imagelink_square: any,
     name: string,
     special_ingredient: string,
     average_rating: number,

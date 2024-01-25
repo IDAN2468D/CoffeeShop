@@ -1,10 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { HomeScreen, FavoritesScreen, CartScreen, OrderHistoryScreen } from '../screens/index'
+import { HomeScreen, FavoritesScreen, CartScreen, OrderHistoryScreen, SettingsScreen } from '../screens/index'
 import CustomIcon from '../components/CustomIcon'
 import { COLORS } from '../theme/theme'
 import { BlurView } from '@react-native-community/blur'
+import CustomIcon_2 from '../components/CustomIcon_2'
 
 const Tab = createBottomTabNavigator();
 
@@ -25,6 +26,16 @@ const TabBarNavigator = () => {
                     />
                 )
             }}>
+            <Tab.Screen
+                name='Settings'
+                component={SettingsScreen}
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <CustomIcon_2 name='settings' size={30} color={focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex} />
+                    )
+                }}
+            />
+
             <Tab.Screen
                 name='History'
                 component={OrderHistoryScreen}

@@ -2,8 +2,12 @@
     "java.compile.nullAnalysis.mode": "disabled",
     "cSpell.words": [
         "BORDERRADIUS",
+        "coffeecup",
         "Favourite",
+        "fontello",
+        "icomoon",
         "imagelink",
-        "Scroller"
+        "Scroller",
+        "viewability"
     ]
 }

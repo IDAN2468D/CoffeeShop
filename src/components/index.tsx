@@ -11,6 +11,12 @@ import HeaderContainer from './HeaderContainer';
 import PaymentMethod from './PaymentMethod';
 import PopUpAnimation from './PopUpAnimation';
 import CreditCard from './CreditCard'
+import OrderHistoryCard from './OrderHistoryCard';
+import OrderItemsCard from './OrderItemsCard'
+import ButtonOrderHistoryList from './ButtonOrderHistoryList';
+import OnboardingCard from './OnboardingCard';
+import Separator from './Separator'
+import ButtonContainer from './ButtonContainer'
 
 export {
     HeaderBar,
@@ -26,4 +32,10 @@ export {
     PaymentMethod,
     PopUpAnimation,
     CreditCard,
+    OrderHistoryCard,
+    OrderItemsCard,
+    ButtonOrderHistoryList,
+    OnboardingCard,
+    Separator,
+    ButtonContainer,
 };

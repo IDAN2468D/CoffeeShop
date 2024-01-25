@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE, SPACING } from '../theme/theme';
-import { CreditCard, GradientBGIcon, HeaderContainer, PaymentFooter, PaymentMethod, PopUpAnimation } from '../components';
+import { ScrollView, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { COLORS, SPACING } from '../theme/theme';
+import { CreditCard, HeaderContainer, PaymentFooter, PaymentMethod, PopUpAnimation } from '../components';
 import { PaymentList } from '../data/PaymentList'
-import LinearGradient from 'react-native-linear-gradient';
-import CustomIcon from '../components/CustomIcon';
 import { useStore } from '../store/store';
 
 
@@ -82,6 +80,5 @@ const styles = StyleSheet.create({
     },
     LottieAnimation: {
         flex: 1,
-
     }
 })
