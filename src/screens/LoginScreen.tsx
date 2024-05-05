@@ -44,7 +44,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
 
     const loginUser = async (values: FormValues) => {
         try {
-            const loginResponse: AxiosResponse = await axios.post('http://192.168.1.190:4000/login', {
+            const loginResponse: AxiosResponse = await axios.post('https://jittery-sweatshirt-seal.cyclic.app/login', {
                 email: values.email,
                 password: values.password,
             });

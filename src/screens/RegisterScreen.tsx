@@ -33,7 +33,7 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
 
     const checkUserExistence = async (values: FormValues) => {
         try {
-            const response = await axios.get<{ exists: boolean }>('http://192.168.1.190:4000/user-exist', {
+            const response = await axios.get<{ exists: boolean }>('https://jittery-sweatshirt-seal.cyclic.app/user-exist', {
                 params: {
                     email: values.email,
                     name: values.userName,
@@ -42,7 +42,7 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
             dispatch({ type: "SET_USER_EXISTS", payload: response.data.exists });
 
             if (!response.data.exists) {
-                const registerResponse = await axios.post<{ user: any }>('http://192.168.1.190:4000/register', {
+                const registerResponse = await axios.post<{ user: any }>('https://jittery-sweatshirt-seal.cyclic.app/register', {
                     email: values.email,
                     name: values.userName,
                     password: values.password,
