@@ -15,7 +15,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordProps> = ({ route, navigation }
 
     const handleResetPassword = async () => {
         try {
-            await axios.post(`http://192.168.1.190:4000/reset-password/${token}`, { newPassword });
+            await axios.post(`https://jittery-sweatshirt-seal.cyclic.app/reset-password/${token}`, { newPassword });
             Alert.alert('Success', 'Password reset successful.');
 
             navigation.navigate('ResetPasswordScreen', { token: token });
