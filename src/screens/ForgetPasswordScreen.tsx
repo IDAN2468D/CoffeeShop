@@ -13,7 +13,7 @@ const ForgetPasswordScreen: React.FC<ForgotPasswordProps> = ({ navigation }) => 
 
     const handleForgotPassword = async () => {
         try {
-            const response = await axios.post('http://192.168.1.190:4000/forgot-password', { email });
+            const response = await axios.post('https://jittery-sweatshirt-seal.cyclic.app/forgot-password', { email });
             const { token } = response.data;
             Alert.alert('Success', 'Password reset instructions sent to your email.');
             navigation.navigate('ResetPasswordScreen', { token });
