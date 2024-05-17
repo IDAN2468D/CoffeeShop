@@ -15,11 +15,13 @@ const ResetPasswordScreen: React.FC<ResetPasswordProps> = ({ route, navigation }
 
     const handleResetPassword = async () => {
         try {
+            if (!newPassword) {
+                Alert.alert('Error', 'New password cannot be empty.');
+                return;
+            }
             await axios.post(`https://jittery-sweatshirt-seal.cyclic.app/reset-password/${token}`, { newPassword });
             Alert.alert('Success', 'Password reset successful.');
-
-            navigation.navigate('ResetPasswordScreen', { token: token });
-
+            navigation.navigate('Login'); // Assuming you want to navigate to a login screen
         } catch (error) {
             console.error('Reset password failed:', error);
             Alert.alert('Error', 'Reset password failed. Please try again.');
