@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View, StatusBar, Button } from 'react-native';
 import React, { useState } from 'react';
+import { StyleSheet, Text, View, StatusBar, Button, Alert } from 'react-native';
 import { COLORS } from '../theme/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ButtonContainer } from '../components';
+import Modal from 'react-native-modal';
 
 type RootStackParamList = {
     SettingsScreen: undefined;
@@ -18,6 +19,7 @@ type SettingsScreenNavigationProp = StackNavigationProp<
 
 const SettingsScreen: React.FC = () => {
     const [exampleData, setExampleData] = useState('');
+    const [isModalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<SettingsScreenNavigationProp>();
 
     const clearUserData = async () => {
@@ -30,10 +32,13 @@ const SettingsScreen: React.FC = () => {
         }
     };
 
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
     return (
         <View style={styles.ScreenContainer}>
             <StatusBar backgroundColor={COLORS.primaryBlackHex} />
-
             <ButtonContainer
                 ContainerStyle={{
                     marginHorizontal: 30,
@@ -44,9 +49,20 @@ const SettingsScreen: React.FC = () => {
                 titleStyle={{
                     textAlign: "center"
                 }}
-                onPress={clearUserData}
-                title='Logout'
+                onPress={toggleModal}
+                title='LogOut'
             />
+
+            <Modal isVisible={isModalVisible}>
+                <View style={styles.modalContent}>
+                    <Text style={styles.modalTitle}>Shall we go out?</Text>
+                    <Text style={styles.modalMessage}>Are you sure you want to log out?</Text>
+                    <View style={styles.modalButtonContainer}>
+                        <Button title="No" onPress={toggleModal} color={COLORS.primaryOrangeHex} />
+                        <Button title="Yes" onPress={clearUserData} color={COLORS.primaryOrangeHex} />
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -58,5 +74,25 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         backgroundColor: COLORS.primaryBlackHex,
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    modalMessage: {
+        fontSize: 16,
+        marginBottom: 20,
+    },
+    modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
     },
 });
