@@ -1,18 +1,12 @@
-import React, { FC, useReducer, useEffect } from 'react';
-import { StatusBar, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Dimensions, DimensionValue } from 'react-native';
+import React, { FC } from 'react';
+import { StatusBar, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Dimensions, useColorScheme } from 'react-native';
 import { COLORS, FONTFAMILY, SPACING } from '../theme/theme';
 import Display from '../theme/Display';
 import { ButtonContainer, Separator } from '../components';
 import CustomIcon_2 from '../components/CustomIcon_2';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { reducer, initialState } from '../useReducer/LoginUseReducer';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-interface FormValues {
-    email: string;
-    password: string;
-}
+import Animated, { useAnimatedKeyboard, useAnimatedStyle } from 'react-native-reanimated';
+import { useLogin } from '../Hooks/useLogin';
 
 type RootStackParamList = {
     Login: undefined;
@@ -29,41 +23,16 @@ const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
 const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const { state, dispatch, loginUser } = useLogin(navigation);
+    const colorScheme = useColorScheme();
+    const keyboard = useAnimatedKeyboard();
 
-    useEffect(() => {
-        checkStoredToken();
-    }, []);
-
-    const checkStoredToken = async () => {
-        const authToken = await AsyncStorage.getItem('authToken');
-        if (authToken) {
-            navigation.navigate('Tab');
-        }
-    };
-
-    const loginUser = async (values: FormValues) => {
-        try {
-            const loginResponse: AxiosResponse = await axios.post('https://rich-tan-xerus-hose.cyclic.app/login', {
-                email: values.email,
-                password: values.password,
-            });
-            const authToken = loginResponse.data.token;
-            await AsyncStorage.setItem('authToken', authToken);
-            dispatch({ type: "SET_LOGGED_IN_USER", payload: loginResponse.data });
-            navigation.navigate("Tab");
-            console.log('Login Response:', loginResponse.data);
-        } catch (error) {
-            if (axios.isAxiosError(error) && (error as AxiosError).response?.status === 401) {
-                console.log('The login information provided is incorrect. Please check your email and password.');
-            } else {
-                console.error('Error when logging in:', error);
-            }
-        }
-    };
+    const animatedStyles = useAnimatedStyle(() => ({
+        transform: [{ translateY: -keyboard.height.value }],
+    }));
 
     return (
-        <View style={styles.Container}>
+        <Animated.View style={[styles.Container, animatedStyles, { backgroundColor: colorScheme === 'light' ? COLORS.primaryBlackHex : COLORS.primaryBlackHex }]}>
             <StatusBar barStyle="light-content" backgroundColor={COLORS.primaryBlackHex} />
             <Image source={require("../assets/app_images/coffee.jpg")} style={styles.image} />
             <View style={styles.LoginContainer}>
@@ -159,7 +128,7 @@ const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
                     </Text>
                 </View>
             </View>
-        </View>
+        </Animated.View>
     );
 };
 
@@ -168,7 +137,6 @@ export default LoginScreen;
 const styles = StyleSheet.create({
     Container: {
         flex: 1,
-        backgroundColor: COLORS.primaryBlackHex,
     },
     image: {
         width: windowDimensions.width,

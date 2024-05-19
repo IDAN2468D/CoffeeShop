@@ -1,18 +1,12 @@
-import React, { FC, useReducer, useState } from 'react';
-import { StatusBar, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Dimensions, DimensionValue, ScrollView } from 'react-native'
+import React, { FC } from 'react';
+import { StatusBar, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import Animated, { useAnimatedKeyboard, useAnimatedStyle } from 'react-native-reanimated';
 import CustomIcon_2 from '../components/CustomIcon_2';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { COLORS, FONTFAMILY, SPACING } from '../theme/theme';
 import { ButtonContainer, Separator } from '../components';
 import Display from '../theme/Display';
-import { reducer, initialState } from '../useReducer/RegisterUseReducer'
-import axios from 'axios';
-
-interface FormValues {
-    email: string;
-    userName: string,
-    password: string
-}
+import useRegister from '../Hooks/useRegister'; // Adjust the path based on your project structure
 
 type RootStackParamList = {
     Login: undefined;
@@ -27,37 +21,16 @@ const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
 const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const { state, dispatch, checkUserExistence } = useRegister();
     const { email, password, userName, showPss } = state;
 
-
-    const checkUserExistence = async (values: FormValues) => {
-        try {
-            const response = await axios.get<{ exists: boolean }>('https://rich-tan-xerus-hose.cyclic.app/user-exist', {
-                params: {
-                    email: values.email,
-                    name: values.userName,
-                },
-            });
-            dispatch({ type: "SET_USER_EXISTS", payload: response.data.exists });
-
-            if (!response.data.exists) {
-                const registerResponse = await axios.post<{ user: any }>('https://rich-tan-xerus-hose.cyclic.app/register', {
-                    email: values.email,
-                    name: values.userName,
-                    password: values.password,
-                });
-
-                dispatch({ type: "SET_NEW_USER", payload: registerResponse.data.user });
-            }
-        } catch (error) {
-            console.error('Error checking user existence:', error);
-            dispatch({ type: "SET_USER_EXISTS", payload: false });
-        }
-    };
+    const keyboard = useAnimatedKeyboard();
+    const animatedStyles = useAnimatedStyle(() => ({
+        transform: [{ translateY: -keyboard.height.value }],
+    }));
 
     return (
-        <View style={styles.Container}>
+        <Animated.View style={[styles.Container, animatedStyles]}>
             <StatusBar barStyle="light-content" backgroundColor={COLORS.primaryBlackHex} />
             <Image source={require("../assets/app_images/coffee.jpg")} style={styles.image} />
             <View style={styles.RegisterContainer}>
@@ -71,21 +44,13 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
                             textAlign: "center"
                         }}>Enter your Email, choose username and password</Text>
                 </View>
-                <View style={{
-                    flexDirection: "row-reverse",
-                    alignItems: 'center',
-                    gap: 5,
-                    backgroundColor: "#D0D0D0",
-                    paddingHorizontal: 10,
-                    borderRadius: 5,
-                    marginTop: 10,
-                }}>
+                <View style={styles.inputContainer}>
                     <CustomIcon_2 name='email' size={24} color={COLORS.primaryWhiteHex} />
                     <TextInput
                         value={email}
                         onChangeText={(text) => dispatch({ type: "SET_EMAIL", payload: text })}
-                        style={{ color: "gray", width: 300, fontSize: email ? 15 : 15 }}
-                        placeholder='enter your Email'
+                        style={styles.textInput}
+                        placeholder='Enter your Email'
                     />
                 </View>
                 {state.userExists !== null ? (
@@ -94,21 +59,13 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
                     <Text style={{ color: COLORS.primaryOrangeHex }}>{state.userExists ? 'Email exists!' : 'Email does not exist.'}</Text>
                 )}
 
-                <View style={{
-                    flexDirection: "row-reverse",
-                    alignItems: 'center',
-                    gap: 5,
-                    backgroundColor: "#D0D0D0",
-                    paddingHorizontal: 10,
-                    borderRadius: 5,
-                    marginTop: 10,
-                }}>
+                <View style={styles.inputContainer}>
                     <CustomIcon_2 name='person' size={24} color={COLORS.primaryWhiteHex} />
                     <TextInput
                         value={userName}
                         onChangeText={(text) => dispatch({ type: "SET_USERNAME", payload: text })}
-                        style={{ color: "gray", width: 300, fontSize: email ? 15 : 15 }}
-                        placeholder='enter your Name'
+                        style={styles.textInput}
+                        placeholder='Enter your Name'
                     />
                 </View>
                 {state.userExists !== null ? (
@@ -117,21 +74,14 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
                     <Text style={{ color: COLORS.primaryOrangeHex }}>{state.userExists ? 'UserName exists!' : 'UserName does not exist.'}</Text>
                 )}
 
-                <View style={{
-                    flexDirection: "row-reverse",
-                    alignItems: 'center',
-                    backgroundColor: "#D0D0D0",
-                    borderRadius: 5,
-                    paddingHorizontal: 15,
-                    marginTop: 10,
-                }}>
+                <View style={styles.passwordContainer}>
                     <CustomIcon_2 name='lock' size={24} color={COLORS.primaryWhiteHex} />
                     <TextInput
                         value={password}
                         onChangeText={(text) => dispatch({ type: "SET_PASSWORD", payload: text })}
                         secureTextEntry={!showPss}
-                        style={{ color: "gray", width: 270, fontSize: email ? 15 : 15 }}
-                        placeholder='enter your Password'
+                        style={styles.textInput}
+                        placeholder='Enter your Password'
                     />
                     <TouchableOpacity onPress={() => dispatch({ type: 'TOGGLE_PASSWORD_VISIBILITY' })} >
                         <CustomIcon_2
@@ -154,37 +104,21 @@ const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
                             navigation.navigate("Login");
                         }
                     }}
-                    ContainerStyle={{
-                        paddingHorizontal: 30,
-                        paddingVertical: 20,
-                        backgroundColor: COLORS.primaryOrangeHex,
-                        borderRadius: 20,
-                    }}
-                    titleStyle={{
-                        textAlign: "center",
-                        color: "white",
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                    }}
+                    ContainerStyle={styles.registerButton}
+                    titleStyle={styles.registerButtonText}
                 />
-                <View style={{ marginTop: SPACING.space_15, }}>
-                    <Text style={{
-                        textAlign: "center",
-                        color: "gray"
-                    }}>
+                <View style={{ marginTop: SPACING.space_15 }}>
+                    <Text style={{ textAlign: "center", color: "gray" }}>
                         You have an account?
-                        <Text
-                            style={{ color: COLORS.primaryWhiteHex }}
-                            onPress={() => navigation.navigate('Login')}
-                        > Sign In</Text>
+                        <Text style={{ color: COLORS.primaryWhiteHex }} onPress={() => navigation.navigate('Login')}> Sign In</Text>
                     </Text>
                 </View>
             </View>
-        </View>
-    )
+        </Animated.View>
+    );
 }
 
-export default RegisterScreen
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
     Container: {
@@ -199,5 +133,39 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         backgroundColor: COLORS.primaryBlackHex,
-    }
-})
+    },
+    inputContainer: {
+        flexDirection: "row-reverse",
+        alignItems: 'center',
+        gap: 5,
+        backgroundColor: "#D0D0D0",
+        paddingHorizontal: 10,
+        borderRadius: 5,
+        marginTop: 10,
+    },
+    passwordContainer: {
+        flexDirection: "row-reverse",
+        alignItems: 'center',
+        backgroundColor: "#D0D0D0",
+        borderRadius: 5,
+        paddingHorizontal: 15,
+        marginTop: 10,
+    },
+    textInput: {
+        color: "gray",
+        width: 270,
+        fontSize: 15,
+    },
+    registerButton: {
+        paddingHorizontal: 30,
+        paddingVertical: 20,
+        backgroundColor: COLORS.primaryOrangeHex,
+        borderRadius: 20,
+    },
+    registerButtonText: {
+        textAlign: "center",
+        color: "white",
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+});
