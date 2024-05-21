@@ -32,7 +32,7 @@ export const useLogin = (navigation: StackNavigationProp<RootStackParamList, 'Lo
 
     const loginUser = async (values: FormValues) => {
         try {
-            const loginResponse: AxiosResponse = await axios.post('https://rich-tan-xerus-hose.cyclic.app/login', {
+            const loginResponse: AxiosResponse = await axios.post('https://victorious-garters-pig.cyclic.app/login', {
                 email: values.email,
                 password: values.password,
             });

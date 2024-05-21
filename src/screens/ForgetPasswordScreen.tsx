@@ -9,11 +9,10 @@ type ForgotPasswordProps = {
 
 const ForgetPasswordScreen: React.FC<ForgotPasswordProps> = ({ navigation }) => {
     const [email, setEmail] = useState('');
-    // Assuming the token is returned in the API response
 
     const handleForgotPassword = async () => {
         try {
-            const response = await axios.post('https://rich-tan-xerus-hose.cyclic.app/forgot-password', { email });
+            const response = await axios.post('https://victorious-garters-pig.cyclic.app/forgot-password', { email });
             const { token } = response.data;
             Alert.alert('Success', 'Password reset instructions sent to your email.');
             navigation.navigate('ResetPasswordScreen', { token });
